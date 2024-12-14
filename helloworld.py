@@ -5,10 +5,10 @@ import numpy as np
 folder_header = r'training'
 
 # 이미지가 있는 원본 폴더 경로
-input_folder = folder_header + r'(infrared)/'
+input_folder = folder_header + r'(colored)/'
 
 # 처리된 이미지를 저장할 상위 폴더 경로
-output_folder = folder_header + r'(infrared_processed_images)'
+output_folder = folder_header + r'(infrared)'
 
 percent1to20 = r'1~20%'
 percent21to40 = r'21~40%'
@@ -50,6 +50,7 @@ for percent in percentList:
         
         # 그레이스케일로 변환하여 흑백 적외선 이미지 생성
         infrared_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        print(infrared_image.shape)
         
         # 새로운 파일 경로 (구간별 폴더에 이미지 이름 유지)
         output_image_path = os.path.join(section_folder, filename)
