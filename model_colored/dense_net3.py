@@ -1,13 +1,12 @@
 import tensorflow as tf
-from tensorflow.keras.layers import Conv2D, Dense, Flatten, MaxPooling2D, GlobalAveragePooling2D, BatchNormalization, Activation, Dropout, Input, Concatenate
+from tensorflow.keras.layers import Conv2D, Dense, MaxPooling2D, GlobalAveragePooling2D, BatchNormalization, Activation, Dropout, Input, Concatenate
 from tensorflow.keras.models import Model
 from tensorflow.keras.utils import to_categorical
 import os
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
-import json
 import time
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import matplotlib.pyplot as plt
 
 # Dense Block 정의
 def dense_block(x, num_layers, growth_rate):
@@ -110,10 +109,29 @@ train_datagen.fit(x_train)
 
 # 모델 학습 및 저장
 start_time = time.time()
-model.fit(train_datagen.flow(x_train, y_train, batch_size=32), 
+history = model.fit(train_datagen.flow(x_train, y_train, batch_size=32), 
           epochs=50, 
           validation_data=(x_test, y_test))  # EarlyStopping 및 학습률 스케줄링을 제거
 end_time = time.time()
+
+# History 객체에서 손실 기록 추출
+train_loss_history = history.history['loss']
+valid_loss_history = history.history['val_loss']
+
+# 시각화
+plt.plot(train_loss_history, label='Training Loss')
+plt.plot(valid_loss_history, label='Validation Loss')
+plt.axhline(y=min(valid_loss_history), color='black', linestyle='--', linewidth=1, label='Min Validation Loss')
+plt.title(f'Learning Curve')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+# 파일로 저장
+output_path = os.path.join("./", f'learning_curve3.png')
+plt.savefig(output_path)
+plt.close()  # 그래프 초기화
+
+print(f"Saved learning curve to {output_path}")
 
 # 학습 시간 출력
 print(f"모델 학습 시간: {end_time - start_time:.2f}초")

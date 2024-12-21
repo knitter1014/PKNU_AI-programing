@@ -43,7 +43,7 @@ testing_dir = "./testing(infrared)"
 x_test, y_test, num_classes = load_data(testing_dir)
 
 # 저장된 모델 로드
-model = load_model('./model_infrared/densenet_custom2.h5')
+model = load_model('./model_infrared/densenet_custom6.h5')
 print("저장된 모델을 로드했습니다.")
 
 # 모델 평가
